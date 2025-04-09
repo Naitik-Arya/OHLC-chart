@@ -1,0 +1,49 @@
+.highcharts-background {
+    fill: #172d3e;
+  }
+
+  .highcharts-title,
+  .highcharts-axis-title,
+  .highcharts-axis-labels,
+  .highcharts-legend-item{
+    fill: #c6cbcf ;
+  }
+
+text{
+    fill:#72808a;
+}
+
+
+.highcharts-candlestick-series .highcharts-point-up {
+    fill: #01a781;
+    stroke: #01a781;  
+}
+
+
+.highcharts-candlestick-series .highcharts-point-down {
+    fill: #e44b44; 
+    stroke: #e44b44; 
+}
+
+
+.chart-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chart-wrapper {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+  }
+
+
+.loading,
+.error {
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+}
