@@ -9,6 +9,10 @@
     fill: #c6cbcf ;
   }
 
+  .highcharts-root{
+    height: 100% !important;
+    width: 100% !important;
+  }
 text{
     fill:#72808a;
 }
@@ -25,20 +29,32 @@ text{
     stroke: #e44b44; 
 }
 
+.highcharts-grid-line {
+  stroke: #b8b7b715; 
+  stroke-width: 1 !important ;   
+  shape-rendering: crispEdges;
+}
 
 .chart-container {
-    height: 100%;
-    width: 100%;
+    /* height: 100%;
+    width: 100%; */
     display: flex;
     flex-direction: column;
   }
   
   .chart-wrapper {
     flex-grow: 1;
-    width: 100%;
-    height: 100%;
+    /* width: 100%;
+    height: 100%; */
   }
 
+.num-up{
+  color: #01a781;
+}
+
+.num-down{
+  color:#e44b44
+}
 
 .loading,
 .error {

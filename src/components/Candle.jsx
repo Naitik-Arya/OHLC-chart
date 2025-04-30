@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCandleRequest } from "../store/slices/candleSlice";
-import Highcharts from "highcharts/highstock";
+import Highcharts, { Tooltip } from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import 'highcharts/css/highcharts.css';
 import './Candle.css';
@@ -13,7 +13,7 @@ function Candle() {
     const [ohlcData, setOhlcData] = useState([]);
     const [chartSize, setChartSize] = useState({
         width: window.innerWidth - 60, // Subtract sidebar width
-        height: window.innerHeight
+        height: window.innerHeight - 35
       });
 
     
@@ -36,8 +36,8 @@ function Candle() {
     useEffect(() => {
         const handleResize = () => {
           setChartSize({
-            width: window.innerWidth - 60, // minus sidebar
-            height: window.innerHeight
+            width: window.innerWidth - 60,
+            height: window.innerHeight -35
           });
         };
         window.addEventListener("resize", handleResize);
@@ -71,7 +71,7 @@ function Candle() {
         }
       
         const dataPayload = msg[1];
-        if (!dataPayload || dataPayload === "hb") return;
+        if (!dataPayload || dataPayload === "hb") return;     
       
         if (Array.isArray(dataPayload[0])) {
           // Snapshot case
@@ -98,7 +98,7 @@ function Candle() {
             dataPayload[2],  // close
           ];
       
-          setOhlcData((prevData) => {
+          setOhlcData((prevData = []) => {
             const lastIndex = prevData.findIndex((d) => d[0] === formattedPoint[0]);
             let updatedData;
             if (lastIndex !== -1) {
@@ -111,6 +111,9 @@ function Candle() {
       
             updatedData.sort((a, b) => a[0] - b[0]);
             // return updatedData.slice(-200);
+            console.log("Formatted update point:", formattedPoint);
+            console.log("Updated data length:", updatedData.length);
+            return updatedData;
           });
       
           const chart = chartComponentRef.current?.chart;
@@ -129,16 +132,45 @@ function Candle() {
     ws.onclose = () => {
       console.log("WebSocket closed");
     };
-
-    // Cleanup: close WebSocket when component unmounts
     return () => {
       ws.close();
     };
   }, []);
 
+
+  function updateHeader(chart, point) {
+    if (!chart.series || chart.series.length === 0) {
+      return;
+    }
+    
+    const series = chart.series[0];
+  
+    if (!series.points || series.points.length === 0) {
+      return;
+    }
+  
+
+    const p = point || series.points[ series.points.length - 1 ];
+    
+    const isUp = p.close >= p.open;
+    const numClass = isUp ? 'num-up' : 'num-down';
+    const parts = [
+      `<span class="symbol">BTC/USD.30.Bitfinex</span>`,
+      `O <span class="${numClass}">${Highcharts.numberFormat(p.open, 0)}</span>`,
+      `H <span class="${numClass}">${Highcharts.numberFormat(p.high, 0)}</span>`,
+      `L <span class="${numClass}">${Highcharts.numberFormat(p.low, 0)}</span>`,
+      `C <span class="${numClass}">${Highcharts.numberFormat(p.close, 0)}</span>`
+    ];
+    chart.setTitle({ text: parts.join('&nbsp;&nbsp;'), useHTML: true });
+  }
+
     // Memoize chart options for performance
     const options = useMemo(() => ({
-        title: { text: "BTC/USD OHLC Candlestick Chart" },
+        title: { 
+          text: '',
+          useHTML: true,
+          align: 'left'
+        },
         chart: {
             type: "candlestick",
             zoomType: "x", 
@@ -147,18 +179,45 @@ function Candle() {
             styledMode: true,
             height: chartSize.height,
             width: chartSize.width,
+            events: {
+
+              load() {
+              }
+            }
         },
         xAxis: { 
             type: "datetime",
-            minRange: 10 * 60 * 1000, 
+            minRange: 10 * 60 * 1000,  
             scrollbar: { enabled: true }, 
+            gridLineWidth: 1,
+            
         },
         yAxis: { 
             opposite: true,
-            title: { text: "Price" } 
+            title: { text: "Price" },
+            gridLineWidth: 1,
+            
         },
-        rangeSelector: { enabled: true },
-        navigator: { enabled: true },
+
+        plotOptions: {
+          series: {
+            point: {
+              events: {
+                mouseOver() {
+                  updateHeader(this.series.chart, this);
+                }
+              }
+            }
+          }
+        },
+        tooltip: {
+          enabled: false,
+        },
+        legend: {
+          enabled: false
+        },
+        rangeSelector: { enabled: false },
+        navigator: { enabled: false },
         series: [
             {
                 type: "candlestick",
@@ -169,7 +228,14 @@ function Candle() {
         ],
     }), [ohlcData,chartSize,]);
 
-
+    //UseEffect to set Title
+    useEffect(() => {
+      const chart = chartComponentRef.current?.chart;
+      if (chart) {
+        updateHeader(chart);
+        chart.container.addEventListener('mouseleave', () => updateHeader(chart));
+      }
+    }, [ohlcData]);
 
     return (
         <div className="chart-container">
@@ -181,7 +247,7 @@ function Candle() {
                   highcharts={Highcharts}
                   options={options}
                   ref={chartComponentRef}
-                  containerProps={{ style: { height: "100%", width: "100%" } }}
+                  // containerProps={{ style: { height: "100%", width: "100%" } }}
                 />
               </div>
             )}

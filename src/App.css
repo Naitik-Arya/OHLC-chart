@@ -1,38 +1,74 @@
-/* App.css */
 body, html, #root {
-  height: 100%;
-  width: 100%;
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #0e1621;
+  background-color: #172d3e; 
+  color: #c6cbcf;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+
+}
+
+.header button {
+  background-color: transparent;
+  color: #c6cbcf;
+  font-size: 14px;
+  border: none;
+  padding: 4px 8px;
+  margin: 0 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+img{
+  height: 20px;
+}
+
+.header button:hover {
+  background-color: #2c3e50;
+}
+
+.left, .right {
+  display: flex;
+  align-items: center;
+}
+
+.vl {
+  height: 20px;
+  border-left: 1.5px solid #2c3e50;
+  margin: 0 6px;
 }
 
 .app-container {
   display: flex;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
+  /* height: calc(100vh - 27px);
+  width: 100vw; */
+  /* overflow: hidden; */
 }
 
 .sidebar {
   width: 60px;
-  background-color: #1e2a38;
+  background-color: #172d3e;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px 0;
   gap: 10px;
-  border-right: 1px solid #2c3e50;
+  border-right: 1px solid #172d3e;
 }
 
 .icon-btn {
   background: none;
   border: none;
-  color: #ccc;
+  color: #c6cbcf ;
   font-size: 18px;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
 }
@@ -44,8 +80,12 @@ body, html, #root {
 
 .chart-area {
   flex: 1;
-  padding: 0px;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  background-color: #172d3e;
+}
+.show button{
+  color: #c6cbcf;
+  background-color: transparent;
+  border: 0px;
 }

@@ -1,0 +1,46 @@
+:root {
+    --header-color: #94a3b8;
+    --bid-color: #22c55e;
+    --ask-color: #ef4444;
+  }
+ 
+  .order-book {
+    display: flex; gap: 1rem;
+     
+    
+  }
+  .order-book table {
+    flex: 1; border-collapse: collapse;
+    width: 100%; table-layout: fixed;
+  }
+  .order-book th,
+  .order-book td {
+    padding: 0.25rem 0.5rem; 
+    text-align: center;
+    position: relative; 
+    white-space: nowrap;
+  }
+  .order-book thead th {
+    color: var(--header-color);
+    font-size: 0.75rem; text-transform: uppercase;
+  }
+  .order-book .bids td.price {
+    color: var(--bid-color);
+  }
+  .order-book .asks td.price {
+    color: var(--ask-color);
+  }
+  .order-book td.depth {
+    padding: 0; overflow: hidden;
+  }
+  .order-book td.depth::before {
+    content: '';                
+    display: block;              
+    position: absolute;          
+    top: 0; bottom: 0; left: 0; 
+    width: var(--depth);       
+    background-color: currentColor;
+    opacity: 0.1;
+    z-index: -1;
+  }
+  
