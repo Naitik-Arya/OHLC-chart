@@ -3,13 +3,13 @@ import './Book.css'
 
 export default function OrderBook() {
   const [bids, setBids] = useState([])
-  const [asks, setAsks] = useState([])
+  const [asks, setAsks] = useState([]) 
   const wsRef = useRef(null)
 
   useEffect(() => {
     // 1. Connect
     const ws = new WebSocket('wss://api-pub.bitfinex.com/ws/2')
-    wsRef.current = ws
+    wsRef.current = ws 
 
     ws.onopen = () => {
       // 2. Subscribe
@@ -69,52 +69,53 @@ export default function OrderBook() {
 
   return (
     <div className="order-book">
-  {/* Bids (left table) */}
-  <table className="bids">
-    <thead>
-      <tr>
-        <th>Price</th>
-        <th>Amount</th>
-        <th>Count</th>
-      </tr>
-    </thead>
-    <tbody>
-      {bids.map(b => (
-        <tr key={b.price}>
-          <td className="price">{b.price.toFixed(2)}</td>
-          <td className="amount">{b.amount.toFixed(4)}</td>
-          <td
-            className="depth"
-            style={{ '--depth': `${(b.amount / maxBidSize) * 100}%` }}
-          >{b.count}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
+      {(bids.length == 0|| asks.length == 0)&& <p className="loading">Loading...</p>}
+      {/* Bids (left table) */}
+      <table className="bids">
+        <thead>
+          <tr>
+            <th>Price</th>
+            <th>Amount</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bids.map(b => (
+            <tr key={b.price}>
+              <td className="price">{b.price.toFixed(2)}</td>
+              <td className="amount">{b.amount.toFixed(4)}</td>
+              <td
+                className="depth"
+                style={{ '--depth': `${(b.amount / maxBidSize) * 100}%` }}
+              >{b.count}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
-  {/* Asks (right table) */}
-  <table className="asks">
-    <thead>
-      <tr>
-        <th>Price</th>
-        <th>Amount</th>
-        <th>Count</th>
-      </tr>
-    </thead>
-    <tbody>
-      {asks.map(a => (
-        <tr key={a.price}>
-          <td className="price">{a.price.toFixed(2)}</td>
-          <td className="amount">{a.amount.toFixed(4)}</td>
-          <td
-            className="depth"
-            style={{ '--depth': `${(a.amount / maxAskSize) * 100}%` }}
-          >{a.count}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+      {/* Asks (right table) */}
+      <table className="asks">
+        <thead>
+          <tr>
+            <th>Price</th>
+            <th>Amount</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {asks.map(a => (
+            <tr key={a.price}>
+              <td className="price">{a.price.toFixed(2)}</td>
+              <td className="amount">{a.amount.toFixed(4)}</td>
+              <td
+                className="depth"
+                style={{ '--depth': `${(a.amount / maxAskSize) * 100}%` }}
+              >{a.count}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
 
   )
 }

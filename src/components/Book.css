@@ -6,8 +6,6 @@
  
   .order-book {
     display: flex; gap: 1rem;
-     
-    
   }
   .order-book table {
     flex: 1; border-collapse: collapse;
@@ -43,4 +41,11 @@
     opacity: 0.1;
     z-index: -1;
   }
-  
+.loading,
+.error {
+    width: 100%;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+}

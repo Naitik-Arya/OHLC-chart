@@ -74,7 +74,7 @@ function App() {
                 <button onClick={() => setShowOrderBook(!showOrderBook)}>
                 {showOrderBook ? '\u2193' : '\u2192'}
                 </button>
-                <span style={{color:'#c6cbcf'}}>CHART </span>
+                <span style={{color:'#c6cbcf'}}>ORDER BOOK </span>
                 <span style={{color:'#586871'}}>BTC/USD</span>
               </div>
               {showOrderBook && <OrderBook />}
